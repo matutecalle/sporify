@@ -27,7 +27,7 @@ function LayoutDrawer() {
   const [isClosing, setIsClosing] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [debounceTimer, setDebounceTimer] = useState(null);
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('TOKEN')
 
   function handleDrawerClose(){
     setIsClosing(true);

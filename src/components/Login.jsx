@@ -26,7 +26,7 @@ const Login = ({ setIsAuthenticated }) => {
     try {
       const response = await axios.post(url, data, { headers });
       const token = response.data.access_token;
-      localStorage.setItem('token', token)
+      localStorage.setItem('TOKEN', token)
 
       // Autenticación exitosa, cambia el estado para mostrar el resto de la app
       setIsAuthenticated(true);
