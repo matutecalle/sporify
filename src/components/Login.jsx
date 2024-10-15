@@ -21,7 +21,6 @@ const Login = ({ setIsAuthenticated }) => {
 
   const getToken = async (clientId, clientSecret) => {
     const url = 'https://accounts.spotify.com/api/token';
-
     const data = `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`;
 
     const headers = {
@@ -52,7 +51,7 @@ const Login = ({ setIsAuthenticated }) => {
         alignItems="center"
         height="100vh"
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{color: "white"}}>
           Login
         </Typography>
         <TextField
@@ -62,6 +61,7 @@ const Login = ({ setIsAuthenticated }) => {
           margin="normal"
           value={clientId}
           onChange={(e) => setClientId(e.target.value)}
+          sx={{borderColor: "white", color: "white"}}
         />
         <TextField
           label="Client Secret"
@@ -71,6 +71,7 @@ const Login = ({ setIsAuthenticated }) => {
           type="password"
           value={clientSecret}
           onChange={(e) => setClientSecret(e.target.value)}
+          sx={{borderColor: "white", color: "white"}}
         />
         <Button
           variant="contained"
