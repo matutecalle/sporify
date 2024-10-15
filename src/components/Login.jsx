@@ -5,7 +5,6 @@ import axios from 'axios';
 const Login = ({ setIsAuthenticated }) => {
   const [clientId, setClientId] = useState('');
   const [clientSecret, setClientSecret] = useState('');
-  const [token, setToken] = useState(null);
 
   const handleLogin = async () => {
     if (clientId && clientSecret) {
@@ -22,17 +21,12 @@ const Login = ({ setIsAuthenticated }) => {
   const getToken = async (clientId, clientSecret) => {
     const url = 'https://accounts.spotify.com/api/token';
     const data = `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`;
-
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
     try {
       const response = await axios.post(url, data, { headers });
-
       const token = response.data.access_token;
-      setToken(token);
-      alert('Token obtenido correctamente');
+      localStorage.setItem('token', token)
 
       // Autenticación exitosa, cambia el estado para mostrar el resto de la app
       setIsAuthenticated(true);
@@ -51,7 +45,7 @@ const Login = ({ setIsAuthenticated }) => {
         alignItems="center"
         height="100vh"
       >
-        <Typography variant="h4" gutterBottom sx={{color: "white"}}>
+        <Typography variant="h4" gutterBottom>
           Login
         </Typography>
         <TextField
@@ -82,12 +76,6 @@ const Login = ({ setIsAuthenticated }) => {
         >
           Login
         </Button>
-
-        {token && (
-          <Typography variant="body1" color="textSecondary" sx={{ marginTop: 2 }}>
-            Token: {token}
-          </Typography>
-        )}
       </Box>
     </Container>
   );

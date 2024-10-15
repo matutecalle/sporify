@@ -14,7 +14,6 @@ import ListItemText from '@mui/material/ListItemText';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './home_page';
 import { InputAdornment, TextField } from '@mui/material';
@@ -26,7 +25,7 @@ const drawerWidth = 240;
 function LayoutDrawer() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [debounceTimer, setDebounceTimer] = useState(null);
   const token = localStorage.getItem('token')
 
@@ -62,9 +61,9 @@ function LayoutDrawer() {
 
   const getArtists = (text) => {
     const encodedQuery = encodeURIComponent(text);
-    axios.get(`https://api.spotify.com/v1/search?type=artist&q=${encodedQuery}`, {
-      headers: { 'Authorization': 'Bearer BQBIVpIH48d8zohsGqoCmImSFCBXqOqQAdiMNZtjKwaLYmfrllQ97JOHg8Aw0Q284lGfxTCufjwsODXwAkZm5lP0AnxvAGmzmnRlkhBfq7ft0-7oWKY' }
-    })
+    const url = `https://api.spotify.com/v1/search?type=artist&q=${encodedQuery}`
+    const headers = { 'Authorization': `Bearer ${token}` }
+    axios.get(url, { headers })
       .then((response) => {
         console.log(response.data.artists.items);
       })
