@@ -17,26 +17,60 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './home_page';
+import { InputAdornment, TextField } from '@mui/material';
+import { SearchOutlined } from '@mui/icons-material';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
 function LayoutDrawer() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [debounceTimer, setDebounceTimer] = useState(null);
+  const token = localStorage.getItem('token')
 
-  const handleDrawerClose = () => {
+  function handleDrawerClose(){
     setIsClosing(true);
     setMobileOpen(false);
   };
 
-  const handleDrawerTransitionEnd = () => {
+  function handleDrawerTransitionEnd(){
     setIsClosing(false);
   };
 
-  const handleDrawerToggle = () => {
+  function handleDrawerToggle(){
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
+  };
+
+  // Función que maneja la búsqueda al presionar Enter o al esperar 1.5 segundos
+  const handleSearch = (e) => {
+    // Si presiona "Enter", realiza la búsqueda inmediatamente
+    if (e.keyCode === 13) {
+      if (debounceTimer) clearTimeout(debounceTimer); // Limpia el temporizador
+      getArtists(e.target.value);
+    } else {
+      // Configura el debounce para llamar a la API después de 1.5 segundos
+      if (debounceTimer) clearTimeout(debounceTimer); // Limpia el temporizador anterior
+      setDebounceTimer(setTimeout(() => {
+        getArtists(e.target.value);
+      }, 1500));
+    }
+  };
+
+  const getArtists = (text) => {
+    const encodedQuery = encodeURIComponent(text);
+    axios.get(`https://api.spotify.com/v1/search?type=artist&q=${encodedQuery}`, {
+      headers: { 'Authorization': 'Bearer BQBIVpIH48d8zohsGqoCmImSFCBXqOqQAdiMNZtjKwaLYmfrllQ97JOHg8Aw0Q284lGfxTCufjwsODXwAkZm5lP0AnxvAGmzmnRlkhBfq7ft0-7oWKY' }
+    })
+      .then((response) => {
+        console.log(response.data.artists.items);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const drawer = (
@@ -91,9 +125,25 @@ function LayoutDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
+          <Box>
+            <TextField
+              placeholder='Artista'
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={searchText}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlined/>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{borderColor: "white", color: "white"}}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyUp={(e) => handleSearch(e)}
+            />
+          </Box>
         </Toolbar>
       </AppBar>
       <Box
