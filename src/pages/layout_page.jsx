@@ -19,6 +19,8 @@ import HomePage from './home_page';
 import { InputAdornment, TextField } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 import axios from 'axios';
+import AlbumDetail from './album_detail';
+import ArtistDetail from './artist_detail';
 
 const drawerWidth = 240;
 
@@ -183,7 +185,9 @@ function LayoutDrawer() {
         <Toolbar />
         <Routes>
           <Route path='/' element={<HomePage />} />
-        </Routes>
+          <Route path='/artist/:artistId' element={<ArtistDetail />} /> {/* Ruta al ArtistDetail */}
+          <Route path='/album/:albumId' element={<AlbumDetail />} /> {/* Ruta al AlbumDetail */}
+          </Routes>
       </Box>
     </Box>
   );
