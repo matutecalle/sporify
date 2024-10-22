@@ -5,71 +5,54 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import HomePage from './home_page';
-import { InputAdornment, TextField } from '@mui/material';
+import { ImageListItem, InputAdornment, TextField, Typography } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
-import axios from 'axios';
+import SearchPage from './search_page';
 
 const drawerWidth = 240;
 
-function LayoutDrawer() {
+function LayoutPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [debounceTimer, setDebounceTimer] = useState(null);
-  const token = localStorage.getItem('TOKEN')
+  const [favoriteArtists, setFavoriteArtists] = useState([])
+  const [favoriteSongs, setFavoriteSongs] = useState([])
+  const navigate = useNavigate();
 
-  function handleDrawerClose(){
+  function handleDrawerClose() {
     setIsClosing(true);
     setMobileOpen(false);
   };
 
-  function handleDrawerTransitionEnd(){
+  function handleDrawerTransitionEnd() {
     setIsClosing(false);
   };
 
-  function handleDrawerToggle(){
+  function handleDrawerToggle() {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
   };
 
-  // Función que maneja la búsqueda al presionar Enter o al esperar 1.5 segundos
   const handleSearch = (e) => {
-    // Si presiona "Enter", realiza la búsqueda inmediatamente
     if (e.keyCode === 13) {
-      if (debounceTimer) clearTimeout(debounceTimer); // Limpia el temporizador
-      getArtists(e.target.value);
+      if (debounceTimer) clearTimeout(debounceTimer);
+      navigate(`/artists/search?q=${encodeURIComponent(e.target.value)}`);
     } else {
-      // Configura el debounce para llamar a la API después de 1.5 segundos
-      if (debounceTimer) clearTimeout(debounceTimer); // Limpia el temporizador anterior
+      if (debounceTimer) clearTimeout(debounceTimer);
       setDebounceTimer(setTimeout(() => {
-        getArtists(e.target.value);
+        navigate(`/artists/search?q=${encodeURIComponent(e.target.value)}`);
       }, 1500));
     }
-  };
-
-  const getArtists = (text) => {
-    const encodedQuery = encodeURIComponent(text);
-    const url = `https://api.spotify.com/v1/search?type=artist&q=${encodedQuery}`
-    const headers = { 'Authorization': `Bearer ${token}` }
-    axios.get(url, { headers })
-      .then((response) => {
-        console.log(response.data.artists.items);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const drawer = (
@@ -77,29 +60,51 @@ function LayoutDrawer() {
       <Toolbar />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {favoriteArtists.length === 0 ? (
+          <Typography variant="body1" align="center">
+            Aquí aparecerán tus artistas favoritos
+          </Typography>
+        ) : (
+          favoriteArtists.map((artist, index) => (
+            <ListItem key={artist.id} disablePadding>
+              <ListItemButton>
+                <ImageListItem key={artist.id} sx={{ width: '40px', height: '40px' }}>
+                  <img
+                    srcSet={`${artist.images[0]?.url}?w=50&h=50&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${artist.images[0]?.url}?w=50&h=50&fit=crop&auto=format`}
+                    alt={artist.name}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+                <ListItemText primary={artist.name} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        )}
+        <Divider />
       </List>
-      <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {favoriteSongs.length === 0 ? (
+          <Typography variant="body1" align="center">
+            Aquí aparecerán tus canciones favoritas
+          </Typography>
+        ) : (
+          favoriteSongs.map((artist, index) => (
+            <ListItem key={artist.id} disablePadding>
+              <ListItemButton>
+                <ImageListItem key={artist.id} sx={{ width: '40px', height: '40px' }}>
+                  <img
+                    srcSet={`${artist.images[0]?.url}?w=50&h=50&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${artist.images[0]?.url}?w=50&h=50&fit=crop&auto=format`}
+                    alt={artist.name}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+                <ListItemText primary={artist.name} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        )}
       </List>
     </div>
   );
@@ -124,6 +129,7 @@ function LayoutDrawer() {
           >
             <MenuIcon />
           </IconButton>
+
           <Box>
             <TextField
               placeholder='Artista'
@@ -134,11 +140,11 @@ function LayoutDrawer() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchOutlined/>
+                    <SearchOutlined />
                   </InputAdornment>
                 ),
               }}
-              sx={{borderColor: "white", color: "white"}}
+              sx={{ borderColor: "white", color: "white" }}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyUp={(e) => handleSearch(e)}
             />
@@ -176,17 +182,18 @@ function LayoutDrawer() {
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-        </Routes>
-      </Box>
+      return (
+      <div>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/artists/search" element={<SearchPage />} />
+          </Routes>
+        </Box>
+      </div>
+      );
     </Box>
   );
 }
 
-export default LayoutDrawer;
+export default LayoutPage;
