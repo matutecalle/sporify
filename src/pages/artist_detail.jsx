@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardActionArea, CardMedia } from '@mui/material';
+import { Box, Typography, Grid2, Card, CardActionArea, CardMedia } from '@mui/material';
 
 function ArtistDetail() {
-  let { artistId } = useParams();
+  const { artistId } = useParams();
   const [artist, setArtist] = useState(null);
   const [albums, setAlbums] = useState([]);
 
   // Obtiene el token desde localStorage
   const token = localStorage.getItem('TOKEN');
 
-  artistId = "6XyY86QOPPrYVGvF9ch6wz"; // Temporalmente hardcodeado
   useEffect(() => {
     if (token) {
       axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -44,9 +43,9 @@ function ArtistDetail() {
   return (
     <Box sx={{ padding: 2 }}>
       {/* Estructura en dos columnas para la imagen y la información */}
-      <Grid container spacing={4}>
+      <Grid2 container spacing={4}>
         {/* Imagen del artista a la izquierda */}
-        <Grid item xs={12} md={4}>
+        <Grid2 item xs={12} md={4}>
           <Card>
             <CardMedia
               component="img"
@@ -55,35 +54,35 @@ function ArtistDetail() {
               sx={{ maxHeight: 300, objectFit: 'cover' }}
             />
           </Card>
-        </Grid>
+        </Grid2>
 
         {/* Información del artista a la derecha */}
-        <Grid item xs={12} md={8}>
+        <Grid2 item xs={12} md={8}>
           <Typography variant="h4" gutterBottom>{artist.name}</Typography>
           <Typography variant="body1">Followers: {artist.followers.total.toLocaleString()}</Typography>
           <Typography variant="body1">Genres: {artist.genres.join(', ')}</Typography>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
 
       {/* Cuadrícula de álbumes */}
       <Box sx={{ marginTop: 4 }}>
         <Typography variant="h5" gutterBottom>Albums</Typography>
-        <Grid container spacing={2}>
+        <Grid2 container spacing={2}>
           {albums.map((album) => (
-            <Grid item xs={12} sm={6} md={3} key={album.id}>
+            <Grid2 item xs={12} sm={6} md={3} key={album.id}>
               <Card>
-                <CardActionArea component={Link} to={`/album/${album.id}`}>
+                <CardActionArea component={Link} to={`/albums/${album.id}`}>
                   <CardMedia
                     component="img"
-                    image={album.images[0].url} // Imagen del álbum
+                    image={album.images[0] && album.images[0]?.url ? album.images[0]?.url : 'https://via.placeholder.com/160' } // Imagen del álbum
                     alt={album.name}
                     sx={{ height: 200, objectFit: 'cover' }} // Ajuste de la imagen de álbum
                   />
                 </CardActionArea>
               </Card>
-            </Grid>
+            </Grid2>
           ))}
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   );

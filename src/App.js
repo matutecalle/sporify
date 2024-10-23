@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import LayoutDrawer from './pages/layout_page';
 import Login from './components/Login';
+import { LayoutPage } from './pages/layout_page';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,7 +21,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         {/* Si está autenticado, muestra el Dashboard. Si no, muestra el Login */}
-        {isAuthenticated ? <LayoutDrawer /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+        {isAuthenticated ? <LayoutPage /> : <Login setIsAuthenticated={setIsAuthenticated} />}
       </BrowserRouter>
     </div>
   );

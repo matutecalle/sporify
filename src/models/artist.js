@@ -1,4 +1,5 @@
-class Artist {
+import Album from './album'
+export default class Artist {
     constructor(artistData, albumsData = []) {
         this.external_urls = artistData.external_urls.spotify;
         this.followers = artistData.followers.total;
