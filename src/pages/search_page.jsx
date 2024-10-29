@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import axios from 'axios';
-import Artist from '../models/artist'
 import getToken from '../utils/auth_service';
 
 function SearchPage(){
@@ -19,7 +18,7 @@ function SearchPage(){
             const headers = { 'Authorization': `Bearer ${token}` }
             axios.get(url, { headers })
                 .then((response) => {
-                    setArtists(response.data.artists.items.map((a) => new Artist(a)));
+                    setArtists(response.data.artists.items);
                 })
                 .catch((error) => {
                   console.log(error);
