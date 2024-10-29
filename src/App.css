@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  /* background-color: #121212; */
+  background-color: #121212 !important;
 }
 
 .App-logo {
@@ -36,4 +36,26 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.t3{
+  color: white;
+}
+
+.appbar{
+  justify-content: center;
+  background-color: #121212;
+}
+
+.text-input, .text-input:focus {
+  border: solid 1.5px white !important;
+  border-radius: 5px;
+}
+
+.text-input input, .text-input svg{
+  color: white;
+}
+
+.item-title, .item-title p {
+  color: white
 }

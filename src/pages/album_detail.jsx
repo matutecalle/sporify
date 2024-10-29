@@ -30,33 +30,34 @@ function AlbumDetail() {
   }
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ px: 55, py: 2, marginTop: '80px' }}>
       {/* Detalles del álbum */}
-      <Card sx={{ display: 'flex', mb: 3 }}>
+      <Card sx={{ display: 'flex', mb: 3, wordBreak: 'break-all', wordWrap: 'break-word' }} className='App'>
         <CardMedia
           component="img"
           image={album.images[0].url}
           alt={album.name}
-          sx={{ width: 300, objectFit: 'cover' }}
+          sx={{ width: 300, objectFit: 'cover', borderRadius: '8px' }}
         />
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 2 }}>
-          <Typography variant="h4" gutterBottom>{album.name}</Typography>
-          <Typography variant="body1">Release Date: {album.release_date}</Typography>
-          <Typography variant="body1">Total Tracks: {album.total_tracks}</Typography>
+          <Typography className="item-title" variant="h3" gutterBottom>{album.name}</Typography>
+          <Typography className="item-title" variant="h5">Release Date: {album.release_date}</Typography>
+          <Typography className="item-title" variant="h5">Total Tracks: {album.total_tracks}</Typography>
         </Box>
       </Card>
 
       {/* Lista de Tracks */}
-      <Typography variant="h5" gutterBottom>Tracks</Typography>
+      <Typography className='item-title' variant="h4" gutterBottom>Tracks</Typography>
       <List>
         {album.tracks.items.map((track, index) => (
           <React.Fragment key={track.id}>
             <ListItem>
               <ListItemText
+              className='item-title'
                 primary={`${index + 1}. ${track.name}`}
                 secondary={`Duration: ${Math.floor(track.duration_ms / 60000)}:${String(
                   Math.floor((track.duration_ms % 60000) / 1000)
-                ).padStart(2, '0')}`} // Formato mm:ss
+                ).padStart(2, '0')}`}
               />
             </ListItem>
             {index < album.tracks.items.length - 1 && <Divider />} {/* Línea divisoria entre tracks */}

@@ -15,12 +15,12 @@ const HomePage = () => {
         textAlign="center"
       >
         {/* Título de bienvenida */}
-        <Typography variant="h2" gutterBottom>
+        <Typography className='t3' variant="h2" gutterBottom>
            SPORIFAI
         </Typography>
 
         {/* Mensaje de descripción */}
-        <Typography variant="h6" color="textSecondary" gutterBottom>
+        <Typography className='t3' variant="h4" gutterBottom>
           Encuentra tu música favorita en segundos.
         </Typography>
       </Box>

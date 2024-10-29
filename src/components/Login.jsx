@@ -45,23 +45,25 @@ const Login = ({ setIsAuthenticated }) => {
         alignItems="center"
         height="100vh"
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography className='t3' variant="h4" gutterBottom>
           Login
         </Typography>
         <TextField
-          label="Client ID"
+          placeholder='Client ID'
           variant="outlined"
           fullWidth
           margin="normal"
+          className='text-input'
           value={clientId}
           onChange={(e) => setClientId(e.target.value)}
           sx={{borderColor: "white", color: "white"}}
         />
         <TextField
-          label="Client Secret"
+          placeholder="Client Secret"
           variant="outlined"
           fullWidth
           margin="normal"
+          className='text-input'
           type="password"
           value={clientSecret}
           onChange={(e) => setClientSecret(e.target.value)}
@@ -69,10 +71,9 @@ const Login = ({ setIsAuthenticated }) => {
         />
         <Button
           variant="contained"
-          color="primary"
           fullWidth
           onClick={handleLogin}
-          sx={{ marginTop: 2 }}
+          sx={{ marginTop: 2, backgroundColor: '#5411f7' }}
         >
           Login
         </Button>

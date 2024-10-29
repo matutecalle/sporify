@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import axios from 'axios';
 import Artist from '../models/artist'
+import getToken from '../utils/auth_service';
 
 function SearchPage(){
     const token = localStorage.getItem('TOKEN')
@@ -21,7 +22,10 @@ function SearchPage(){
                     setArtists(response.data.artists.items.map((a) => new Artist(a)));
                 })
                 .catch((error) => {
-                    console.log(error);
+                  console.log(error);
+                  if(error.status === 401){
+                    getToken()
+                  }
                 });
             
         }
@@ -29,7 +33,8 @@ function SearchPage(){
 
 
       return (
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '60px' }}>
+          <Typography py={'20px'} variant='h3' className='t3'>Búsqueda para "{query}"</Typography>
           <ImageList sx={{ width: '100%', height: 'auto' }} cols={4} gap={16}>
             {artists.map((artist) => (
               <ImageListItem key={artist.id}>
@@ -45,6 +50,7 @@ function SearchPage(){
                   <ImageListItemBar
                     title={artist.images[0]?.url && <Typography sx={{ textAlign: 'center', textWrap: 'balance' }}>{artist.name}</Typography>}
                     position="below"
+                    className='item-title'
                   />
                 </Link>
               </ImageListItem>

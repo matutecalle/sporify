@@ -4,7 +4,6 @@ import './App.css';
 import Login from './components/Login';
 import { LayoutPage } from './pages/layout_page';
 
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
