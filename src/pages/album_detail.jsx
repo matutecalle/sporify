@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Card, CardMedia, List, ListItem, ListItemText, Divider } from '@mui/material';
+import Loading from '../components/Loading';
 
+const IMAGEN_POR_DEFECTO = 'https://placehold.co/300x300/121212/5411f7?text=Sin+imagen';
 
 function AlbumDetail() {
   const { albumId } = useParams();
   const [album, setAlbum] = useState(null);
-  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // Obtiene el token desde localStorage
   const token = localStorage.getItem('TOKEN');
 
   useEffect(() => {
     if (token) {
+      setLoading(true);
+      setError(null);
       axios.get(`https://api.spotify.com/v1/albums/${albumId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
@@ -21,21 +27,31 @@ function AlbumDetail() {
       })
       .catch(error => {
         console.log(error);
-      });
+        setError('No pudimos cargar este álbum. Volvé a intentarlo.');
+      })
+      .finally(() => setLoading(false));
     }
   }, [albumId, token]);
 
-  if (!album) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <Loading mensaje="Cargando álbum..." />;
+  }
+
+  if (error || !album) {
+    return (
+      <Box sx={{ marginTop: '100px', textAlign: 'center' }}>
+        <Typography className='t3' variant="h6">{error ?? 'No encontramos este álbum.'}</Typography>
+      </Box>
+    );
   }
 
   return (
-    <Box sx={{ px: 55, py: 2, marginTop: '80px' }}>
+    <Box sx={{ px: { xs: 2, md: 10, lg: 20 }, py: 2, marginTop: '80px' }}>
       {/* Detalles del álbum */}
-      <Card sx={{ display: 'flex', mb: 3, wordBreak: 'break-all', wordWrap: 'break-word' }} className='App'>
+      <Card sx={{ display: 'flex', mb: 3, wordBreak: 'break-word' }} className='App'>
         <CardMedia
           component="img"
-          image={album.images[0].url}
+          image={album.images?.[0]?.url ?? IMAGEN_POR_DEFECTO}
           alt={album.name}
           sx={{ width: 300, objectFit: 'cover', borderRadius: '8px' }}
         />

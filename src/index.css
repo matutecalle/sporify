@@ -1,6 +1,9 @@
 
 body {
   margin: 0;
+  /* !important porque CssBaseline de MUI pinta el body de blanco */
+  background-color: #121212 !important;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Circular Std Black' !important;
